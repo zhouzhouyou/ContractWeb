@@ -72,7 +72,7 @@
         <label class="col-sm-2 col-form-label" for="attachment" style="display: inline">合同附件</label>
         <div class="col-sm-9">
             <div class="file-loading">
-                <input id="attachment" multiple name="input-b6[]" type="file">
+                <input id="attachment" type="file">
             </div>
         </div>
     </div>
@@ -140,13 +140,25 @@
     let endTime;
     let content;
     let attachment;
-    let num;
+    let finalName;
 
     function submit() {
-        if (!isValid(nameInput)) alert("请填写合同名");
-        if (!isValid(customerInput)) alert("请选择客户");
-        if (!isValid(beginTime) || !isValid(endTime)) alert("请选择时间");
-        if (!isValid(content)) alert("请填写内容");
+        if (!isValid(nameInput)) {
+            alert("请填写合同名");
+            return;
+        }
+        if (!isValid(openCustomerSelector)) {
+            alert("请选择客户");
+            return;
+        }
+        if (!isValid(beginTime) || !isValid(endTime)) {
+            alert("请选择时间");
+            return;
+        }
+        if (!isValid(content)) {
+            alert("请填写内容");
+            return;
+        }
         $.ajax({
             type: "PUT",
             url: "api/contract/draft",
@@ -157,13 +169,14 @@
                 "begin": beginTime.value(),
                 "end": endTime.value(),
                 "content": content.val(),
-                "userName": ""
+                "userName": finalName
             }),
             headers: {'Content-Type': 'application/json;charset=utf8', 'token': getToken()},
 
             statusCode: {
-                200: function (result) {
-                    num = result;
+                200: function () {
+                    alert("成功");
+                    reset();
                 }
             },
 
@@ -176,8 +189,8 @@
     function reset() {
         nameInput.val('');
         setValid(nameInput, false);
-        customerInput.val('');
-        setValid(customerInput, false);
+        openCustomerSelector.val('');
+        setValid(openCustomerSelector, false);
         currentCustomerId = null;
         beginTime.value('');
         setValid(beginTime, false);
@@ -202,12 +215,12 @@
             refreshCustomerTable();
         });
 
-
         let addSelectBtn = function (customer, tr) {
             let select = $(`<td><button class="btn btn-primary">确定</button></td>`);
             select.click(function () {
-                currentCustomerId = customer.id;
+                currentCustomerId = customer.num;
                 openCustomerSelector.val(`编号: ${customer.num}, 姓名: ${customer.name}, 地址：${customer.address}, 电话：${customer.tel}`);
+                setValid(openCustomerSelector, true);
             });
             tr.append(select);
         };
@@ -272,10 +285,25 @@
         attachment = $("#attachment");
         attachment.fileinput({
             theme: "fas",
-            showUpload: false,
+            showUpload: true,
             maxFileCount: 1,
             mainClass: "input-group-lg",
-            language: 'zh'
+            language: 'zh',
+            enctype: 'multipart/form-data',
+            uploadAsync: true,
+            uploadUrl: 'api/contract/attachment/upload',
+            accept: ["doc", "docx", "jpg", "jpeg", "png", "bmp", "gif"],
+            allowedFileExtensions: ["doc", "docx", "jpg", "jpeg", "png", "bmp", "gif"],
+        }).on('fileuploaded', function(event, data) {
+            let response = data.response;
+            finalName = response["finalName"];
+            console.log(event);
+            console.log(data);
+            console.log(finalName);
+        }).on('fileerror', function (event, data, msg) {
+            console.log(event);
+            console.log(data);
+            console.log(msg);
         })
     });
 </script>
