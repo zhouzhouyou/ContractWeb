@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/gijgo.min.css" rel="stylesheet">
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/gijgo.min.js"></script>
@@ -12,133 +13,196 @@
     <title>Bootstrap 101 Template</title>
 
 </head>
-<body>
+<body class="text-center">
 <div id="header"></div>
-<div id="body">
-    <button onclick="clearAll();" type="button">a</button>
-    <button onclick="addAll(a);" type="button">b</button>
-    <input id="datepicker" width="276" />
+<div style="display: flex; width: 100%">
+    <form style="width: 50%">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-num"
+                   style="display: inline">合同编号</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="contract-num" readonly/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-name"
+                   style="display: inline">合同名称</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="contract-name" readonly/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-customerNum" style="display: inline">客户编号</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="contract-customerNum" readonly/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-begin"
+                   style="display: inline">开始时间</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="contract-begin" readonly/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-end"
+                   style="display: inline">结束时间</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="contract-end" readonly/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-content"
+                   style="display: inline">合同内容</label>
+            <div class="col-sm-3">
+                <textarea class="form-control" id="contract-content" readonly></textarea>
+            </div>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">序号</th>
-            <th scope="col">名称</th>
-            <th scope="col">地址</th>
-            <th scope="col">电话</th>
-            <th scope="col">传真</th>
-            <th scope="col">邮编</th>
-            <th scope="col">银行</th>
-            <th scope="col">账户</th>
-            <th scope="col">备注</th>
-            <th scope="col">select</th>
-        </tr>
-        </thead>
-        <tbody id="tableBody">
-        </tbody>
-    </table>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-username"
+                   style="display: inline">操作员</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="contract-username" readonly/>
+            </div>
+        </div>
+
+    </form>
+    <form style="width: 50%;">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-drafter"
+                   style="display: inline">起草</label>
+            <input class="form-control col-sm-3 disabled" id="contract-drafter"/>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-finalizer"
+                   style="display: inline">定稿</label>
+            <input class="form-control col-sm-3 disabled" id="contract-finalizer"/>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-assigner"
+                   style="display: inline">分配</label>
+            <input class="form-control col-sm-3 disabled" id="contract-assigner"/>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-counterSigner" style="display: inline">会签</label>
+            <ul class="list-group" id="contract-counterSigner"></ul>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-reviewer"
+                   style="display: inline">审核</label>
+            <ul class="list-group" id="contract-reviewer"></ul>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="contract-signer"
+                   style="display: inline">签订</label>
+            <ul class="list-group" id="contract-signer"></ul>
+        </div>
+    </form>
 </div>
+
+
 
 <script src="js/js.cookie-2.2.1.min.js"></script>
 <script src="js/nav.js" type="text/javascript"></script>
 <script src="js/common.js" type="text/javascript"></script>
 <script>
 
-    $('#datepicker').datepicker({
-        uiLibrary: 'bootstrap4',
-        locale: 'zh-cn'
-    });
-
-    let tableBody;
-    let a;
-    let x;
-    $(function () {
-        tableBody = $("#tableBody");
-
-
-        class Customer {
-            constructor(num, name, address, tel, fax, code, bank, account, other) {
-                this.num = num;
-                this.name = name;
-                this.address = address;
-                this.tel = tel;
-                this.fax = fax;
-                this.code = code;
-                this.bank = bank;
-                this.account = account;
-                this.other = other;
-            }
-        }
-
-        a = [new Customer(1, 2, 3, 4, 5, 6, 7, 8, 9), new Customer(2, 3, 3, 4, 5, 6, 7, 8, 9)];
-
-        let json = [
-            {
-                "num": 1,
-                "name": "c1",
-                "address": "长沙",
-                "tel": "153******18",
-                "fax": null,
-                "code": null,
-                "bank": null,
-                "account": null,
-                "other": null
-            },
-            {
-                "num": 2,
-                "name": "c2",
-                "address": "北京",
-                "tel": "153******19",
-                "fax": null,
-                "code": null,
-                "bank": null,
-                "account": null,
-                "other": null
-            },
-            {
-                "num": 3,
-                "name": "c3",
-                "address": "CS",
-                "tel": "135********20",
-                "fax": null,
-                "code": null,
-                "bank": null,
-                "account": null,
-                "other": null
-            }
-        ];
-
-        let y = function (object, tr) {
-            // let select = $(`<input type="radio" name="id" value=${object.num} onclick="test(this.value)"/>`);
-            let select = $(`<td><button class="btn btn-primary">确定</button></td>`);
-            select.click(function () {
-                test(object.num);
-            });
-            tr.append(select);
-        };
-        let customer = eval(JSON.stringify(json));
-        addTr(customer, tableBody, y);
-        // addAll(customer);
-    });
-
-    function test(value) {
-        alert(value);
-    }
-
-
-    function addAll(customers) {
-        for (let i = 0; i < customers.length; i++) {
-            let tr = $("<tr></tr>");
-            add(customers[i], tr);
-            tableBody.append(tr);
-
-        }
-
-    }
-
-    function clearAll() {
-        tableBody.empty();
-    }
+    // $('#datepicker').datepicker({
+    //     uiLibrary: 'bootstrap4',
+    //     locale: 'zh-cn'
+    // });
+    //
+    // let tableBody;
+    // let a;
+    // let x;
+    // $(function () {
+    //     tableBody = $("#tableBody");
+    //
+    //
+    //     class Customer {
+    //         constructor(num, name, address, tel, fax, code, bank, account, other) {
+    //             this.num = num;
+    //             this.name = name;
+    //             this.address = address;
+    //             this.tel = tel;
+    //             this.fax = fax;
+    //             this.code = code;
+    //             this.bank = bank;
+    //             this.account = account;
+    //             this.other = other;
+    //         }
+    //     }
+    //
+    //     a = [new Customer(1, 2, 3, 4, 5, 6, 7, 8, 9), new Customer(2, 3, 3, 4, 5, 6, 7, 8, 9)];
+    //
+    //     let json = [
+    //         {
+    //             "num": 1,
+    //             "name": "c1",
+    //             "address": "长沙",
+    //             "tel": "153******18",
+    //             "fax": null,
+    //             "code": null,
+    //             "bank": null,
+    //             "account": null,
+    //             "other": null
+    //         },
+    //         {
+    //             "num": 2,
+    //             "name": "c2",
+    //             "address": "北京",
+    //             "tel": "153******19",
+    //             "fax": null,
+    //             "code": null,
+    //             "bank": null,
+    //             "account": null,
+    //             "other": null
+    //         },
+    //         {
+    //             "num": 3,
+    //             "name": "c3",
+    //             "address": "CS",
+    //             "tel": "135********20",
+    //             "fax": null,
+    //             "code": null,
+    //             "bank": null,
+    //             "account": null,
+    //             "other": null
+    //         }
+    //     ];
+    //
+    //     let y = function (object, tr) {
+    //         // let select = $(`<input type="radio" name="id" value=${object.num} onclick="test(this.value)"/>`);
+    //         let select = $(`<td><button class="btn btn-primary">确定</button></td>`);
+    //         select.click(function () {
+    //             test(object.num);
+    //         });
+    //         tr.append(select);
+    //     };
+    //     let customer = eval(JSON.stringify(json));
+    //     addTr(customer, tableBody, y);
+    //     // addAll(customer);
+    // });
+    //
+    // function test(value) {
+    //     alert(value);
+    // }
+    //
+    //
+    // function addAll(customers) {
+    //     for (let i = 0; i < customers.length; i++) {
+    //         let tr = $("<tr></tr>");
+    //         add(customers[i], tr);
+    //         tableBody.append(tr);
+    //
+    //     }
+    //
+    // }
+    //
+    // function clearAll() {
+    //     tableBody.empty();
+    // }
 
 
 </script>

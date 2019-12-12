@@ -39,7 +39,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="customerBtn" style="display: inline">客户编号</label>
             <div class="col-sm-9">
-                <input class="form-control" data-target=".bd-example-modal-xl" data-toggle="modal" id="customerBtn"
+                <input class="form-control" data-target=".customer-modal" data-toggle="modal" id="customerBtn"
                        placeholder="点击选择"
                        type="text"/>
                 <div class="invalid-feedback"><small>请选择！</small></div>
@@ -89,8 +89,7 @@
 
 </div>
 
-
-<div class="modal fade bd-example-modal-xl" id="customerModal" role="dialog" tabindex="-1">
+<div class="modal fade customer-modal" id="customerModal" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -128,6 +127,7 @@
     </div>
 </div>
 </body>
+
 <script src="js/nav.js" type="text/javascript"></script>
 <script>
     let currentCustomerId = null;
