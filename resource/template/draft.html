@@ -196,6 +196,7 @@
         endTime.value('');
         setValid(endTime, false);
         attachment.fileinput('clear');
+        finalName = null;
     }
 
     $(function () {
@@ -232,10 +233,7 @@
                 headers: {'Content-Type': 'application/json;charset=utf8', 'token': getToken()},
 
                 statusCode: {
-                    200: function (result) {
-                        tableBody.empty();
-                        addTr(result, tableBody, addSelectBtn);
-                    }
+                    200:  (result) => refreshTable(tableBody, result, null, addSelectBtn)
                 },
 
                 error: () => alert("未连接到网络，或者无权限")
@@ -252,12 +250,58 @@
             setValid(openCustomerSelector, currentCustomerId !== null);
         });
 
+        let today = new Date();
+
+        function isLater(a, b) {
+            if (a.getUTCFullYear() !== b.getUTCFullYear()) return a.getUTCFullYear() > b.getUTCFullYear();
+            if (a.getUTCMonth() !==  b.getUTCMonth()) return a.getUTCMonth() > b.getUTCFullYear();
+            return a.getUTCDate() > b.getUTCDate();
+        }
+
+        function beginDateCheck() {
+            if (beginTime.value().length === 0) {
+                setValid(beginTime, false);
+                return;
+            }
+            let beginDate = new Date(beginTime.value());
+            if (isLater(today, beginDate)) {
+                setValid(beginTime, false);
+                return;
+            }
+            if (endTime.value.length !== 0) {
+                if (isLater(beginDate, new Date(endTime.value()))) {
+                    setValid(beginTime, false);
+                    return;
+                }
+            }
+            setValid(beginTime, true);
+        }
+
+        function endDateCheck() {
+            if (endTime.value().length === 0) {
+                setValid(endTime, false);
+                return;
+            }
+            let endDate = new Date(endTime.value());
+            if (isLater(today, endDate)) {
+                setValid(endTime, false);
+                return;
+            }
+            if (beginTime.value.length !== 0) {
+                if (isLater(new Date(beginTime.value()), endDate)) {
+                    setValid(endTime, false);
+                    return;
+                }
+            }
+            setValid(endTime, true);
+        }
+
         beginTime = $("#beginTime");
         beginTime.datepicker({
             uiLibrary: 'bootstrap4',
             locale: 'zh-cn',
             format: 'yyyy-mm-dd',
-            close: () => setValid(beginTime, beginTime.value().length !== 0)
+            close: () => beginDateCheck()
         });
 
         endTime = $("#endTime");
@@ -265,7 +309,7 @@
             uiLibrary: 'bootstrap4',
             locale: 'zh-cn',
             format: 'yyyy-mm-dd',
-            close: () => setValid(endTime, endTime.value().length !== 0)
+            close: () => endDateCheck()
         });
 
         content = $("#content");
@@ -293,6 +337,8 @@
             console.log(event);
             console.log(data);
             console.log(msg);
+        }).on('fileremoved', function (event, id, index) {
+            finalName = null;
         })
     });
 </script>
