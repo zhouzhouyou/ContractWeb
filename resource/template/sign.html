@@ -1,148 +1,107 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<meta content="width=device-width, initial-scale=1" name="viewport">
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="css/my-form.css" rel="stylesheet">
-		<link href="css/gijgo.min.css" rel="stylesheet">
-		<style type="text/css">
-			.clearfix:before, .clearfix:after{
-				content: "";
-				display: table;
-			}
-			.clearfix:after{
-				clear: both;
-			}
-			.clearfix{
-				zoom: 1;
-			}
-		</style>
-		<script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
-		<script src="js/js.cookie-2.2.1.min.js" type="text/javascript"></script>
-		<script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
-		<script src="js/common.js" type="text/javascript"></script>
-		<script src="js/gijgo.min.js" type="text/javascript"></script>
-		<script src="js/messages.zh-cn.min.js" type="text/javascript"></script>
-	</head>
-	<body>
-		<div id="header"></div>
-		<div>
-			<span class="clearfix show" style="margin: 20px;">
-				<input autofocus class="form-control" id="name" type="text" style="float: left; width: 20%; margin-left: 20px;"required placeholder="查询合同" style="display: inline; width: 20%;">
-				<button type="button" class="btn btn-primary" style="float: left; margin-left: 20px;">查询</button>
-			</span>
-			<div class="text-center" style="margin-top: 50px;">
-				<table class="table table-hover" style="width: 80%; margin-top: 20px;" align="center" id="show_table">
-					<thead>
-					<tr>
-						<th scope="col">合同名称</th>
-						<th scope="col">起草时间</th>
-						<th scope="col">结束时间</th>
-						<th scope="col">确定</th>
-					</tr>
-					</thead>
-					<tbody id="customerBody">
-						<tr>
-							<td scope="col">dsadsa1</td>
-							<td scope="col">2019-2-2</td>
-							<td scope="col">2019-12-10</td>
-						</tr>
-						<tr>
-							<td scope="col">dsadsa2</td>
-							<td scope="col">2019-2-3</td>
-							<td scope="col">2019-12-10</td>
-						</tr>
-						<tr>
-							<td scope="col">dsadsa3</td>
-							<td scope="col">2019-2-4</td>
-							<td scope="col">2019-12-10</td>
-						</tr>
-					</tbody>
-				</table>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Title</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/my-form.css" rel="stylesheet">
+    <style type="text/css">
+        .clearfix:before, .clearfix:after {
+            content: "";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+    </style>
+    <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="js/js.cookie-2.2.1.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="js/common.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="header"></div>
+<div class="text-center">
+	<span class="clearfix" style="margin: 20px;">
+		<input autofocus class="form-control" id="name" placeholder="查询合同"
+			   required style="float: left; width: 20%; margin-left: 20px; display: inline;" type="text">
+		<button class="btn btn-primary" onclick="sendFuzzyQuery()" style="float: left; margin-left: 20px;"
+				type="button">查询</button>
+	</span>
+</div>
+<div id="default-contract-table" style="padding: 20px"></div>
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade counterSignModal" data-backdrop="static"
+	 id="countersignModal"
+	 role="dialog" tabindex="-1">
+	<div class="modal-dialog modal-dialog-scrollable modal-xl">
+		<div class="modal-content">
+			<div class="modal-header" style="height: 50px;">
+				<h4 class="modal-title" id="contract-title"></h4>
+				<button class="close" data-dismiss="modal" type="button">&times;</button>
 			</div>
-		</div>
-			<div class="modal fade bd-example-modal-lg" id="customerModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
-					<div class="modal-content">
-						
-						<div class="modal-content">
-							<div class="modal-body" style="padding: 0px;" id="textarea_card_con">
-								<div>
-									<div>
-										<p>合同名称：</p>
-										<p>合同客户：</p>
-										<p>合同开始时间：</p>
-										<p>合同结束时间：</p>
-									</div>
-									<form>
-										<div class="form-group" style="height: 100%;">
-										    <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" style="overflow: auto;" placeholder="请输入签订信息"></textarea>
-										 </div>
-									</form>
-								</div>
-								
+			<div class="modal-content">
+				<div class="modal-body" style="display: flex">
+					<form id="default-contract-modal-form" style="width: 60%"></form>
+					<div style="width: 40%">
+						<form class="text-center">
+							<div id="accordionContainer"></div>
+							<div class="form-group row">
+								<label class="col-form-label" for="newContractContent">新合同内容</label></div>
+							<div class="form-group row">
+                            <textarea class="form-control col-sm-10" id="newContractContent"
+									  style="float: left; width: 40%; border: none; outline: none;"></textarea>
 							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-success" id="submit">提交</button>
-							<button type="button" class="btn btn-danger" id="refuse">重置</button>
-							<button class="btn btn-secondary" data-dismiss="modal" type="button">关闭</button>
-							
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
-		<nav aria-label="..." style="float: right; margin-top:10px ;">
-		  <ul class="pagination">
-		    <li class="page-item disabled">
-		      <span class="page-link">Previous</span>
-		    </li>
-		    <li class="page-item"><a class="page-link" href="#">1</a></li>
-		    <li class="page-item active" aria-current="page">
-		      <span class="page-link">
-		        2
-		        <span class="sr-only">(current)</span>
-		      </span>
-		    </li>
-		    <li class="page-item"><a class="page-link" href="#">3</a></li>
-		    <li class="page-item">
-		      <a class="page-link" href="#">Next</a>
-		    </li>
-		  </ul>
-		</nav>
-		
-	</body>
-	<script src="js/nav.js" type="text/javascript"></script>
-	<script>
-		
-		$(function() {
-			 
-			$("#show_table tr").click(function(){
-				var contract_name = $(this).find("td").eq(0).text();
-				var client_name = "张三";
-				var start_time = $(this).find("td").eq(1).text();
-				var end_time = $(this).find("td").eq(2).text();
-				console.log(contract_name);
-				
-				$("#show_name").text("合同名称：" + contract_name);
-				$("#customerModal").modal();
-				
-			});
-			
-			$("#submit").click(function(){
-				if($("#customerModal").find("textarea").eq(0).val() == ""){
-					alert("请输入意见");
-				}
-			})
-			$("#refuse").click(function(){
-				if($("#customerModal").find("textarea").eq(0).val() == ""){
-					alert("请输入意见");
-				}
-			})
-			
+			<div class="modal-footer">
+				<button class="btn btn-danger" id="submit" type="button">提交</button>
+				<button class="btn btn-secondary" data-dismiss="modal" type="button">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script src="js/nav.js" type="text/javascript"></script>
+<script src="js/contract.js" type="text/javascript"></script>
+<script>
+	let contractTableBody;
+
+
+	$(function () {
+		let btn = $("#btn");
+		btn.click(function () {
+
+		});
+
+		$("#show_table tr").click(function () {
+			var contract_name = $(this).find("td").eq(0).text();
+			var client_name = "张三";
+			var start_time = $(this).find("td").eq(1).text();
+			var end_time = $(this).find("td").eq(2).text();
+			console.log(contract_name);
+
+			$("#contract_name").text("合同名称：" + contract_name);
+			$("#client_name").text("客户姓名：" + client_name);
+			$("#start_time").text("开始时间：" + start_time);
+			$("#end_time").text("结束时间：" + end_time);
+			$("#customerModal").modal();
+
+		});
+
+		$("#submit").click(function () {
+			if ($("#customerModal").find("textarea").eq(1).val() == "") {
+				alert("请输入意见");
+			}
 		})
-		
-	</script>
+	})
+
+</script>
 </html>
