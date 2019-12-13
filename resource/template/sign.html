@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Title</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/my-form.css" rel="stylesheet">
-    <style type="text/css">
-        .clearfix:before, .clearfix:after {
-            content: "";
-            display: table;
-        }
+	<meta charset="utf-8">
+	<title></title>
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/my-form.css" rel="stylesheet">
+	<style type="text/css">
+		.clearfix:before, .clearfix:after {
+			content: "";
+			display: table;
+		}
 
-        .clearfix:after {
-            clear: both;
-        }
+		.clearfix:after {
+			clear: both;
+		}
 
-        .clearfix {
-            zoom: 1;
-        }
-    </style>
-    <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
-    <script src="js/js.cookie-2.2.1.min.js" type="text/javascript"></script>
-    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
-    <script src="js/common.js" type="text/javascript"></script>
+		.clearfix {
+			zoom: 1;
+		}
+	</style>
+	<script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+	<script src="js/js.cookie-2.2.1.min.js" type="text/javascript"></script>
+	<script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
+	<script src="js/common.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="header"></div>
@@ -36,14 +36,13 @@
 	</span>
 </div>
 <div id="default-contract-table" style="padding: 20px"></div>
-<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade counterSignModal" data-backdrop="static"
-	 id="countersignModal"
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade signModal" data-backdrop="static"
+	 id="signModal"
 	 role="dialog" tabindex="-1">
 	<div class="modal-dialog modal-dialog-scrollable modal-xl">
 		<div class="modal-content">
-			<div class="modal-header" style="height: 50px;">
-				<h4 class="modal-title" id="contract-title"></h4>
-				<button class="close" data-dismiss="modal" type="button">&times;</button>
+			<div class="modal-header" style="padding: 0; font-size: 16px;">
+				<h4 class="modal-title" id="modal-title"></h4>
 			</div>
 			<div class="modal-content">
 				<div class="modal-body" style="display: flex">
@@ -52,9 +51,9 @@
 						<form class="text-center">
 							<div id="accordionContainer"></div>
 							<div class="form-group row">
-								<label class="col-form-label" for="newContractContent">新合同内容</label></div>
+								<label class="col-form-label" for="signComment">签订意见</label></div>
 							<div class="form-group row">
-                            <textarea class="form-control col-sm-10" id="newContractContent"
+                            <textarea class="form-control col-sm-10" id="signComment" rows="9"
 									  style="float: left; width: 40%; border: none; outline: none;"></textarea>
 							</div>
 						</form>
@@ -72,36 +71,72 @@
 <script src="js/nav.js" type="text/javascript"></script>
 <script src="js/contract.js" type="text/javascript"></script>
 <script>
+	let contractNum;
 	let contractTableBody;
+	let signModal;
+	let accordion;
+	let signComment;
+	let url = '/api/contract/sign/select';
 
+	function initModal(result) {
+		let contract = result['contract'];
+		loadDetailContractInfo(contract);
+		let csInfos = result['messageList'];
+		accordion.empty();
+		csInfos.forEach((csInfo) => accordion.append(createCard(csInfo['operator'], csInfo['content'])));
+		signModal.modal();
+	}
+
+	function trClick(num) {
+		contractNum = num;
+		$("#modal-title").text(contractNum);
+		$.ajax({
+			type: 'POST',
+			url: '/api/contract/sign_need_message/select',
+			headers: {'Content-Type': 'application/json;charset=utf8', 'token': getToken()},
+			data: JSON.stringify({
+				"contractNum": contractNum
+			}),
+			statusCode: {
+				200: (result) => initModal(result)
+			},
+			error: () => alert("未连接到网络，或者无权限")
+		})
+	}
 
 	$(function () {
-		let btn = $("#btn");
-		btn.click(function () {
-
-		});
-
-		$("#show_table tr").click(function () {
-			var contract_name = $(this).find("td").eq(0).text();
-			var client_name = "张三";
-			var start_time = $(this).find("td").eq(1).text();
-			var end_time = $(this).find("td").eq(2).text();
-			console.log(contract_name);
-
-			$("#contract_name").text("合同名称：" + contract_name);
-			$("#client_name").text("客户姓名：" + client_name);
-			$("#start_time").text("开始时间：" + start_time);
-			$("#end_time").text("结束时间：" + end_time);
-			$("#customerModal").modal();
-
-		});
+		contractTableBody = $('#contractTableBody');
+		signModal = $('#signModal');
+		accordion = $('#accordion');
+		signComment = $("#signComment");
+		loadNewTable(url, trClick);
 
 		$("#submit").click(function () {
-			if ($("#customerModal").find("textarea").eq(1).val() == "") {
+			let content = signComment.val();
+			if (content.length === 0) {
 				alert("请输入意见");
+				return;
 			}
-		})
-	})
+			$.ajax({
+				type:'PUT',
+				url:'/api/contract/sign/add',
+				headers: {'Content-Type': 'application/json;charset=utf8', 'token': getToken()},
+				data: JSON.stringify({
+					"content": content,
+					"contractNum": contractNum,
+					"state": 1
+				}),
+				statusCode: {
+					200: () => {
+						signModal.modal('hide');
+						alert('成功了');
+						loadNewTable(url, trClick);
+					}
+				},
+				error: () => alert("未连接到网络，或者无权限")
+			})
+		});
 
+	});
 </script>
 </html>

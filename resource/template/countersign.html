@@ -124,8 +124,8 @@
                 statusCode: {
                     200: () => {
                         alert('成功');
-                        loadNewTable(url, trClick)
                         finalizeModal.modal('hide');
+                        loadNewTable(url, trClick);
                     }
                 },
                 error: () => alert("未连接到网络，或者无权限")
