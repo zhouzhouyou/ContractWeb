@@ -142,8 +142,6 @@
     let attachment;
     let finalName;
 
-    changeActive(contractManagementNav);
-
     function submit() {
         if (!isValid(nameInput)) {
             alert("请填写合同名");
@@ -203,6 +201,8 @@
     }
 
     $(function () {
+        changeActive(contractManagementNav);
+
         tableBody = $('#tableBody');
 
         nameInput = $("#name");

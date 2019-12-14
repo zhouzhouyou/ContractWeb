@@ -70,8 +70,6 @@
 	let countersignComment;
 	let url = '/api/contract/countersign/select';
 
-	changeActive(contractManagementNav);
-
     function sendFuzzyQuery() {
         sendSimpleFuzzyQuery('/api/contract/fuzzy/countersign/select',$("#fuzzyQuery").val(), trClick)
     }
@@ -101,6 +99,8 @@
 	}
     
     $(function () {
+        changeActive(contractManagementNav);
+
     	contractTableBody = $("#contractTableBody");
         countersignModal = $("#countersignModal");
         countersignComment = $("#countersign-comment");
@@ -124,7 +124,7 @@
                 statusCode: {
                     200: () => {
                         alert('成功');
-                        finalizeModal.modal('hide');
+                        countersignModal.modal('hide');
                         loadNewTable(url, trClick);
                     }
                 },

@@ -60,8 +60,6 @@
     let reviewContent;
     let url = '/api/contract/review/select';
 
-    changeActive(contractManagementNav);
-
     function sendFuzzyQuery() {
         sendSimpleFuzzyQuery('/api/contract/fuzzy/review/select',$("#fuzzyQuery").val(), trClick)
     }
@@ -119,6 +117,8 @@
     }
 
     $(function () {
+        changeActive(contractManagementNav);
+
         contractTableBody = $('#contractTableBody');
         reviewModal = $('#reviewModal');
         accordion = $('#accordion');

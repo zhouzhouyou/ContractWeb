@@ -31,6 +31,7 @@ document.getElementById("header").innerHTML = `<link href="css/bootstrap.min.css
                     <a class="dropdown-item" href="#">角色管理</a>
                 </div>
             </li>
+            <li class="nav-item" id="customerNav"><a class="nav-link" href="customer.html">客户管理</a></li>
             <li class="nav-item" id="logQueryNav"><a class="nav-link" href="log.html">日志查询</a></li>
             <li class="nav-item dropdown" id="functionManagementNav">
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">个人信息</a>
@@ -56,6 +57,7 @@ let assignNav;
 
 let contractManagementNav;
 let contractQueryNav;
+let customerNav;
 let logQueryNav;
 let functionManagementNav;
 
@@ -94,6 +96,7 @@ $(function () {
 
     contractManagementNav = $("#contractManagementNav");
     contractQueryNav = $("#contractQueryNav");
+    customerNav = $("#customerNav");
     logQueryNav = $("#logQueryNav");
     functionManagementNav = $("#functionManagementNav");
 

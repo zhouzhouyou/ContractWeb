@@ -176,8 +176,6 @@
     let customerBtn;
     let contractOperatorTable;
 
-    changeActive(contractQueryNav);
-
     function isChecked(cb) {
         return cb.is(' :checked');
     }
@@ -339,6 +337,8 @@
     }
 
     $(function () {
+        changeActive(contractQueryNav);
+
         contractModal = $("#contractModal");
         contractTableBody = $("#contractTableBody");
         customerTableBody = $("#customerTableBody");

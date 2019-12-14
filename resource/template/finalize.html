@@ -72,8 +72,6 @@
     let newContractContent;
     let url = '/api/contract/finalize/select';
 
-    changeActive(contractManagementNav);
-
     function sendFuzzyQuery() {
         sendSimpleFuzzyQuery('/api/contract/fuzzy/finalize/select',$("#fuzzyQuery").val(), trClick)
     }
@@ -105,6 +103,8 @@
     }
 
     $(function () {
+        changeActive(contractManagementNav);
+
         contractTableBody = $('#contractTableBody');
         finalizeModal = $('#finalizeModal');
         accordion = $('#accordion');
