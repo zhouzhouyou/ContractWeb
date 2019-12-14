@@ -142,6 +142,8 @@
     let attachment;
     let finalName;
 
+    changeActive(contractManagementNav);
+
     function submit() {
         if (!isValid(nameInput)) {
             alert("请填写合同名");
@@ -194,7 +196,7 @@
         setValid(beginTime, false);
         endTime.value('');
         setValid(endTime, false);
-        content.value('');
+        content.val('');
         setValid(content, false);
         attachment.fileinput('clear');
         finalName = null;
