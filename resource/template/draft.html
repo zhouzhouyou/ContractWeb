@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Title</title>
+    <title>起草</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/my-form.css" rel="stylesheet">
     <link href="css/gijgo.min.css" rel="stylesheet">
@@ -232,7 +232,7 @@
                 type: "POST",
                 url: "api/customer/fuzzyQuery",
                 data: JSON.stringify({
-                    "query": customerInput.val()
+                    "content": customerInput.val()
                 }),
                 headers: {'Content-Type': 'application/json;charset=utf8', 'token': getToken()},
 
